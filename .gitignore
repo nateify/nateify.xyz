@@ -1,0 +1,28 @@
+# Hugo
+/public/
+/resources/
+/assets/jsconfig.json
+hugo_stats.json
+/.hugo_build.lock
+
+# Nodejs
+/node_modules/
+
+# Obsidian
+/content/.obsidian/
+/content/.trash/
+
+# Misc
+[Dd]esktop.ini
+Thumbs.db
+.directory
+.Trash-*
+.*.kate-swp
+.swp.*
+.*.swp
+.env
+.env.*
+*.~*
+*.env
+*~
+~*

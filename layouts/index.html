@@ -1,0 +1,35 @@
+{{ define "main" }}
+    <div class="h-card">
+        <div>{{ .Content }}</div>
+
+        <data class="u-photo" value="{{ "/images/naoto.webp" | absURL }}"></data>
+
+        <dl class="hc-container">
+            <data class="p-note" value="{{ .Site.Params }}"></data>
+
+            <dt>Username</dt>
+            <dd class="p-name p-nickname">nateify</dd>
+            <dt>Pronunciation</dt>
+            <dd>
+                <a href="{{ "/pronouncing_nateify.mp3" | absURL }}" target="_blank" class="u-sound p-ipa plain">
+                    ˈneɪtəfaɪ
+                </a>
+            </dd>
+            <dt>Given Name</dt>
+            <dd class="p-given-name">Nate</dd>
+            <dt>Email</dt>
+            <dd><a href="mailto:hello@nateify.xyz" class="plain u-email">hello@nateify.xyz</a></dd>
+            <dt>Pronouns</dt>
+            <dd class="p-gender-identity">he, him, his</dd>
+            <dt>Residing in</dt>
+            <dd class="p-country-name">The USA</dd>
+        </dl>
+
+        {{ range .Site.Params.socialLinks }}
+            <div class="social-links">
+                <p><a class="u-url" href="{{ .url }}" rel="me noopener noreferrer" target="_blank">{{ .name }}</a></p>
+            </div>
+        {{ end }}
+
+    </div>
+{{ end }}

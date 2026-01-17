@@ -1,0 +1,88 @@
+{{ define "main" }}
+    <div class="list h-feed">
+        {{ if .Data.Singular }}
+            <h2 class="blog-filter">Filtering for "{{ .Title }}"</h2>
+        {{ else }}
+            <h2 class="visually-hidden">Recent Posts</h2>
+        {{ end }}
+        <ul class="blog-posts">
+            {{ $paginator := .Paginate (where .Pages.ByDate.Reverse "Type" "posts") }}
+            {{ range .Paginator.Pages }}
+                <li class="h-entry">
+                    <time class="dt-published" datetime="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">
+                        {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+                    </time>
+                    <div class="list-content">
+                        <a class="u-url p-name" href="{{ .RelPermalink }}">{{ .Title }}</a>
+                        <p class="p-summary">
+                            {{ .Plain | truncate 180 }}
+                        </p>
+                    </div>
+                </li>
+            {{ end }}
+        </ul>
+    </div>
+
+    {{ if not .Data.Singular }}
+        <nav class="blog-tags" aria-label="Tags">
+            {{ range .Site.Taxonomies.tags }}
+                <li><a href="{{ .Page.RelPermalink }}">#{{ lower .Page.Title }}</a></li>
+            {{ end }}
+        </nav>
+    {{ end }}
+
+    {{ if or $paginator.HasPrev $paginator.HasNext }}
+        <nav class="post-nav" aria-label="Posts navigation">
+            <ul>
+                {{ if $paginator.HasPrev }}
+                    <li class="prev">
+                        <a href="{{ $paginator.Prev.URL }}" rel="prev">
+                            <span class="arrow" aria-hidden="true">←</span>
+                            Newer Posts
+                        </a>
+                    </li>
+                {{ end }}
+                {{ if $paginator.HasNext }}
+
+                    <li class="next">
+                        <a href="{{ $paginator.Next.URL }}" rel="next">
+                            Older Posts
+                            <span class="arrow" aria-hidden="true">→</span>
+                        </a>
+                    </li>
+                {{ end }}
+            </ul>
+        </nav>
+    {{ end }}
+
+    {{- $author := dict "@type" "Person" "name" .Site.Params.author.name "url" .Site.BaseURL -}}
+
+    {{- $posts := slice -}}
+    {{- range $paginator.Pages -}}
+        {{- $postItem := dict
+            "@type" "BlogPosting"
+            "headline" .Title
+            "url" .Permalink
+            "datePublished" (.Date.Format "2006-01-02T15:04:05-07:00")
+            "author" $author
+        -}}
+        {{- $posts = $posts | append $postItem -}}
+    {{- end -}}
+
+    {{- $name := .Site.Title -}}
+    {{- if .Data.Singular -}}
+        {{- $name = .Title -}}
+    {{- end -}}
+
+    {{- $jsonLd := dict
+        "@context" "https://schema.org"
+        "@type" "Blog"
+        "name" $name
+        "url" .Permalink
+        "blogPost" $posts
+    -}}
+
+<script type="application/ld+json">
+{{ $jsonLd | jsonify | safeJS }}
+</script>
+{{ end }}

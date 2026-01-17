@@ -1,0 +1,24 @@
+{
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "DotJoshJohnson.xml"
+    },
+    "go-template.languages": ["json"],
+    "files.associations": {
+        "*.json": "go-template"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "css.format.newlineBetweenSelectors": false,
+    "css.format.preserveNewLines": false,
+    "css.format.spaceAroundSelectorSeparator": true,
+    "css.lint.boxModel": "warning",
+    "css.lint.duplicateProperties": "warning",
+    "css.lint.emptyRules": "ignore",
+    "css.lint.float": "warning",
+    "css.lint.zeroUnits": "warning"
+}

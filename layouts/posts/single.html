@@ -1,0 +1,83 @@
+{{ define "main" }}
+    <div class="post h-entry">
+        <header class="post-header">
+            {{ if .Title }}
+                <h1 class="p-name">{{ .Title }}</h1>
+            {{ end }}
+            <a href="{{ .Permalink }}" class="post-date u-url">
+                Published:
+                <time class="dt-published" datetime="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">
+                    {{ .Date.Format "Jan 02, 2006" }}
+                </time>
+            </a>
+            {{ if gt (sub .Lastmod.Unix .Date.Unix) 172800 }}
+                <p class="last-updated">
+                    Last updated:
+                    <time class="dt-updated" datetime="{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}">
+                        {{ .Lastmod.Format "Jan 02, 2006" }}
+                    </time>
+                </p>
+            {{ end }}
+        </header>
+
+        <data class="u-uid" value="{{ if .Params.uuid }}urn:uuid:{{ .Params.uuid }}{{ else }}{{ .Permalink }}{{ end }}"></data>
+
+        <link class="p-author h-card" href="{{ .Site.BaseURL | absURL }}">
+
+        <article class="post-content e-content">
+            {{ .Content }}
+        </article>
+
+        <footer class="post-footer">
+            {{/*  {{ if or .Params.mastodon_link .Params.bluesky_link }}
+                <section class="discussion">
+                    <p>
+                        Discuss this post on
+                        {{ with .Params.mastodon_link }}
+                            <a class="u-syndication" href="{{ . }}" target="_blank" rel="syndication noopener">
+                                Mastodon
+                            </a>
+                        {{ end }}
+
+                        {{ if and .Params.mastodon_link .Params.bluesky_link }}and{{ end }}
+
+                        {{ with .Params.bluesky_link }}
+                            <a class="u-syndication" href="{{ . }}" target="_blank" rel="syndication noopener">
+                                Bluesky
+                            </a>
+                        {{ end }}.
+                    </p>
+                </section>
+            {{ end }}  */}}
+
+            {{ with .Params.tags }}
+                <nav class="post-tags" aria-label="Post tags">
+                    <ul>
+                    {{ range . }}
+                        <li><a class="p-category" href="{{ "tags/" | relLangURL }}{{ . | urlize }}"><span aria-hidden="true">#</span>{{ . }}</a></li>
+                    {{ end }}
+                    </ul>
+                </nav>
+            {{ end }}
+        </footer>
+    </div>
+
+{{- $author := dict "@type" "Person" "name" .Site.Params.author.name "url" .Site.BaseURL -}}
+{{- $mainEntity := dict "@type" "WebPage" "@id" .Permalink -}}
+
+{{- $jsonLd := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "datePublished" (.Date.Format "2006-01-02T15:04:05-07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05-07:00")
+  "author" $author
+  "description" (.Summary | plainify | truncate 160)
+  "mainEntityOfPage" $mainEntity
+-}}
+
+<script type="application/ld+json">
+{{ $jsonLd | jsonify | safeJS }}
+</script>
+
+{{ end }}

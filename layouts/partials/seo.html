@@ -1,0 +1,28 @@
+{{- $title := "" -}}
+{{- if .IsHome -}}
+    {{- $title = site.Title -}}
+{{- else if .Title -}}
+    {{- $title = printf "%s | %s" .Title site.Title -}}
+{{- else -}}
+    {{- $title = printf "%s … | %s" (delimit (split .Summary " " | first 5) " ") site.Title -}}
+{{- end -}}
+
+{{- $desc := "" -}}
+{{- with .Description }}
+    {{ $desc = . }}
+{{ else }}
+    {{ if .IsPage }}{{ $desc = .Summary | plainify | chomp }}{{ else }}{{ $desc = site.Params.description }}{{ end }}
+{{ end -}}
+
+{{- $keys := "" -}}
+{{- if .IsPage -}}
+    {{- $keys = delimit .Params.tags ", " -}}
+{{- else -}}
+    {{- $allTerms := slice -}}
+    {{- range $tx, $terms := site.Taxonomies -}}
+        {{ range $term, $v := $terms -}}{{ $allTerms = $allTerms | append $term }}{{ end }}
+    {{ end -}}
+    {{- $keys = delimit ($allTerms | uniq) ", " -}}
+{{- end -}}
+
+{{- return (dict "title" $title "description" $desc "keywords" $keys) -}}

@@ -1,0 +1,16 @@
+{{ $hcardClass := cond .IsHome "" "p-author h-card" }}
+{{ $pNameClass := cond .IsHome "" "p-name" }}
+{{ $uUrlClass  := cond .IsHome "" "u-url u-uid" }}
+
+<p class="{{ $hcardClass }}" itemscope itemtype="https://schema.org/WebPage">
+    &copy;
+    <span itemprop="copyrightYear">{{ now.Format "2006" }}</span>
+    <span itemprop="copyrightHolder" itemscope itemtype="https://schema.org/Person">
+        <span class="{{ $pNameClass }}" itemprop="name">{{ .Site.Params.author.name }}</span>.
+        <link class="{{ $uUrlClass }}" itemprop="url" href="{{ .Site.BaseURL | absURL }}">
+    </span>
+    This work is licensed under
+    <a rel="license" itemprop="license" href="https://creativecommons.org/licenses/by-sa/4.0/">
+        <abbr title="Creative Commons Attribution-ShareAlike 4.0 International">CC BY-SA 4.0</abbr>.
+    </a>
+</p>

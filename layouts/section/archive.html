@@ -1,0 +1,65 @@
+{{ define "main" }}
+    <div class="archive">
+        <h2>Archive</h2>
+        {{ $list := ($.Site.GetPage "taxonomyTerm" "categories").Pages }}
+        {{ if gt (len $list) 0 }}
+            <div class="archive-categories">
+                <h3>Categories</h3>
+                <ul>
+                    {{ range $list }}
+                        <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+        {{ end }}
+        <div class="full-archives h-feed">
+            <h3>Full Post List</h3>
+            {{ $list := (where .Site.RegularPages "Type" "posts") }}
+            {{ range ($list.GroupByDate "2006" "desc") }}
+                <h4>{{ .Key }}</h4>
+
+                <ul class="blog-posts">
+                    {{ range .Pages }}
+                        <li class="h-entry">
+                            <time class="dt-published" datetime="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">
+                                {{ .Date.Format (default "2006-01-02" .Site.Params.dateFormat) }}
+                            </time>
+                            <div class="list-content">
+                                <a class="u-url p-name" href="{{ .RelPermalink }}">{{ .Title }}</a>
+                            </div>
+                        </li>
+                    {{ end }}
+                </ul>
+            {{ end }}
+        </div>
+    </div>
+
+{{- $list := (where .Site.RegularPages "Type" "posts") -}}
+{{- $items := slice -}}
+
+{{- range $index, $page := $list -}}
+    {{- $item := dict
+        "@type" "ListItem"
+        "position" (add $index 1)
+        "url" $page.Permalink
+        "name" $page.Title
+    -}}
+    {{- $items = $items | append $item -}}
+{{- end -}}
+
+{{- $jsonLd := dict
+    "@context" "https://schema.org"
+    "@type" "CollectionPage"
+    "name" "Archive"
+    "url" .Permalink
+    "mainEntity" (dict
+    "@type" "ItemList"
+    "itemListElement" $items
+    )
+-}}
+
+<script type="application/ld+json">
+{{ $jsonLd | jsonify | safeJS }}
+</script>
+
+{{ end }}

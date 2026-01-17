@@ -1,0 +1,57 @@
+{{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+{{ $syntax := resources.Get "css/syntax.css" | minify }}
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <meta name="robots" content="noarchive" />
+
+    {{- $seo := partial "seo.html" . -}}
+
+
+    <title>{{ $seo.title }}</title>
+
+    {{- partial "meta.html" . -}}
+
+    {{- partial "favicon.html" . -}}
+
+    {{- partial "indieweb.html" . -}}
+
+
+    <link rel="canonical" href="{{ .Permalink }}" />
+    {{- with .Param "feed.hub" -}}
+        <link rel="hub" href="{{ . }}" />
+    {{- end -}}
+
+
+    <link rel="self" href="{{ "feed.atom" | absURL }}" />
+    {{ range site.Home.OutputFormats -}}
+        {{ if eq .Rel "alternate" -}}
+            <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ $.Site.Title }}" />
+        {{ end -}}
+    {{ end -}}
+
+
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" />
+    {{ if .Page.Store.Get "hasCodeBlock" }}
+        <link rel="stylesheet" href="{{ $syntax.RelPermalink }}" />
+    {{ end }}
+
+    {{ if .IsHome }}
+        {{- $author := dict "@type" "Person" "name" .Site.Params.author.name "url" .Site.BaseURL -}}
+
+        {{- $jsonLd := dict
+            "@context" "https://schema.org"
+            "@type" "WebSite"
+            "url" .Site.BaseURL
+            "name" .Site.Title
+            "author" $author
+        -}}
+
+        <script type="application/ld+json">
+            {{ $jsonLd | jsonify | safeJS }}
+        </script>
+    {{ end }}
+
+</head>

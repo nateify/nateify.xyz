@@ -1,0 +1,17 @@
+{{- $content := .Content -}}
+<!doctype html>
+<html lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
+    {{ partial "head.html" . }}
+    <body>
+        <a class="visually-hidden focusable" href="#main-content">Skip to content</a>
+        <header>
+            {{- partial "header.html" . -}}
+        </header>
+        <main id="main-content">
+            {{ block "main" . }}{{ end }}
+        </main>
+        <footer>
+            {{- partial "footer.html" . -}}
+        </footer>
+    </body>
+</html>

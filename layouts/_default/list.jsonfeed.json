@@ -1,0 +1,63 @@
+{{/* Go Template */}}
+{{- $data := partial "feed.html" . -}}
+
+{
+    "version": "https://jsonfeed.org/version/1.1",
+    "title": {{ $data.FeedTitleRaw | jsonify }},
+    "home_page_url": {{ .Site.BaseURL  | absURL | jsonify }},
+    {{ with .OutputFormats.Get "jsonfeed" }}"feed_url": {{.Permalink | absURL | jsonify }},{{ end }}
+    {{- with .Param "feed.hub" -}}
+    "hubs": [{"type": "WebSub", "url": {{ . | jsonify }}}],
+    {{- end -}}
+    {{ with $data.AuthorName         }}
+    "author": {
+    "name": {{ . | jsonify }},
+    "avatar": {{ $.Site.Params.author.avatar | absURL | jsonify }},
+    "url": {{  $.Site.Params.author.url | jsonify }}
+    },
+    "authors": [{
+    "name": {{ . | jsonify }},
+    "avatar": {{ $.Site.Params.author.avatar | absURL | jsonify }},
+    "url": {{  $.Site.Params.author.url | jsonify }}
+    }],
+      {{ end }}
+    {{- with .Site.LanguageCode }}
+    "language": {{ . | jsonify }},
+    {{- end }}
+    {{- with .Param "feed.iconLarge" -}}
+    "icon": {{ . | absURL |jsonify }},
+    {{- end -}}
+    {{- with .Param "feed.icon" -}}
+    "favicon": {{ . | absURL |jsonify }},
+    {{- end -}}
+    "items": [
+    {{- range $index, $page := $data.Pages }}
+    {{- if $index }}, {{ end }}
+    {
+        "id": {{ if .Params.uuid }}"urn:uuid:{{ .Params.uuid }}"{{ else }}{{ .Permalink | jsonify }}{{ end }},
+        "url": {{ .Permalink | jsonify }},
+        "title": {{ .Title | jsonify }},
+        {{ $content := .Content
+                | replaceRE "src=\"/" (printf "src=\"%s/" .Site.BaseURL)
+                | replaceRE "href=\"/" (printf "href=\"%s/" .Site.BaseURL)
+                | replaceRE "href=\"#" (printf "href=\"%s#" .Permalink)
+            }}
+        "content_html": {{ $content | jsonify }},
+        "date_published": {{ .Date.Format "2006-01-02T15:04:05-07:00" | jsonify }},
+        "date_modified": {{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | jsonify }},
+        "tags": [
+        {{- $itemTags := slice -}}
+        {{- range $taxonomy, $_ := site.Taxonomies -}}
+            {{- with $page.Param $taxonomy -}}
+                {{- $itemTags = $itemTags | union . -}}
+            {{- end -}}
+        {{- end -}}
+        {{- range $index, $tag := $itemTags -}}
+            {{- if $index }}, {{ end -}}
+            {{- $tag | jsonify -}}
+        {{- end -}}
+        ]
+    }
+    {{ end }}
+    ]
+}

@@ -1,0 +1,126 @@
+baseURL = "https://www.nateify.xyz/"
+copyright = "© {year} %s. Licensed under %s."
+enableRobotsTXT = true
+languageCode = "en-US"
+removePathAccents = true
+summaryLength = 30
+timeZone = "America/New_York"
+title = "nateify's website"
+
+
+[module]
+    [[module.mounts]]
+        source = 'content'
+        target = 'content'
+        excludeFiles = [ '.obsidian/**', '_templates/**' ]
+
+[params]
+    dateFormat = "2006-01-02"
+    licenseName = "CC BY-SA 4.0"
+    licenseURL = "https://creativecommons.org/licenses/by-sa/4.0/"
+    id = "1ca107e0-c4f1-4e14-8ccf-8fe88c2c1ffd"
+    pgpkey = "/key.pub"
+    fediverseCreator = "@nateify@mastodon.social"
+    description = "I'm nateify, you can call me Nate if you prefer. I'm interested in the indieweb, smolweb, fediverse, and other ways to share experiences with people online in an old-school fashion. I've also been trying to contribute to projects of internet archival, open source software, and independent wikis."
+
+    [params.author]
+        name = "nateify"
+        email = "hello@nateify.xyz"
+        url = "https://www.nateify.xyz"
+        avatar = "/images/naoto.webp"
+
+    [params.indieweb]
+        authorizationEndpoint = "https://indieauth.com/auth"
+        tokenEndpoint = "https://tokens.indieauth.com/token"
+        webmention = "https://webmention.io/www.nateify.xyz/webmention"
+        pingback = "https://webmention.io/www.nateify.xyz/xmlrpc"
+
+    [params.feed]
+        icon = "web-app-manifest-192x192.png"
+        iconLarge = "web-app-manifest-512x512.png"
+        hub = "https://pubsubhubbub.appspot.com/"
+
+    [[params.socialLinks]]
+        name = "mastodon.social/@nateify"
+        url = "https://mastodon.social/@nateify"
+
+    [[params.socialLinks]]
+        name = "bsky.app/profile/nateify.xyz"
+        url = "https://bsky.app/profile/nateify.xyz"
+
+    [[params.socialLinks]]
+        name = "github.com/nateify"
+        url = "https://github.com/nateify"
+
+    [[params.socialLinks]]
+        name = "Keyoxide profile"
+        url = "https://keyoxide.org/3DCAEF800392FB972881C4D6EA48522F41CB3658"
+
+
+[services]
+    [services.rss]
+        limit = 15
+
+[frontmatter]
+    lastmod = [ "lastmod", "date" ]
+
+[minify]
+    minifyOutput = true
+    [minify.tdewolff]
+        [minify.tdewolff.html]
+            keepQuotes = true
+
+[mediaTypes]
+    [mediaTypes."application/atom+xml"]
+        suffixes = [ "atom" ]
+
+    [mediaTypes."application/feed+json"]
+        suffixes = [ "json" ]
+
+[outputFormats.atom]
+    baseName = "feed"
+    mediaType = "application/atom+xml"
+    rel = "alternate"
+    isPlainText = false
+    isHTML = false
+    noUgly = true
+    permalinkable = false
+
+[outputFormats.jsonfeed]
+    baseName = "feed"
+    mediaType = "application/feed+json"
+    rel = "alternate"
+    isPlainText = true
+    isHTML = false
+    noUgly = true
+    permalinkable = false
+
+[outputs]
+    home = [ 'html', 'rss', 'atom', 'jsonfeed' ]
+    section = [ 'html' ]
+    term = [ 'html' ]
+    taxonomy = [ 'html' ]
+
+[pagination]
+    pagerSize = 15
+
+[markup]
+    [markup.highlight]
+        guessSyntax = true
+        noClasses = false
+    [markup.goldmark]
+        [markup.goldmark.renderer]
+            unsafe = true
+        [markup.goldmark.extensions]
+            strikethrough = false
+            [markup.goldmark.extensions.extras]
+                [markup.goldmark.extensions.extras.delete]
+                    enable = true
+                [markup.goldmark.extensions.extras.insert]
+                    enable = true
+                [markup.goldmark.extensions.extras.mark]
+                    enable = true
+                [markup.goldmark.extensions.extras.subscript]
+                    enable = true
+                [markup.goldmark.extensions.extras.superscript]
+                    enable = true

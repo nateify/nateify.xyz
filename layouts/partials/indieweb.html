@@ -1,0 +1,36 @@
+{{- with site.Params.fediverseCreator -}}
+    <meta name="fediverse:creator" content="{{ . }}" />
+{{- end -}}
+
+{{ range .Site.Params.socialLinks }}
+    <link rel="me" href="{{ .url }}" />
+{{ end }}
+
+{{- with .Param "author.email" -}}
+    <link rel="me" href="mailto:{{ . }}" />
+{{- end -}}
+
+
+<link rel="author" href="{{ site.BaseURL }}" />
+
+{{ with site.Params.indieweb }}
+    {{ with .authorizationEndpoint }}
+        <link rel="authorization_endpoint" href="{{ . }}" />
+    {{ end }}
+
+    {{ with .tokenEndpoint }}
+        <link rel="token_endpoint" href="{{ . }}" />
+    {{ end }}
+
+    {{ with .webmention }}
+        <link rel="webmention" href="{{ . }}" />
+    {{ end }}
+
+    {{ with .pingback }}
+        <link rel="pingback" href="{{ . }}" />
+    {{ end }}
+{{ end }}
+
+{{ with site.Params.pgpkey }}
+    <link rel="pgpkey" type="application/pgp-keys" href="{{ . | absURL }}" />
+{{ end }}
