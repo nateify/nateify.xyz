@@ -3,10 +3,9 @@
         <div>{{ .Content }}</div>
 
         <data class="u-photo" value="{{ "/images/naoto.webp" | absURL }}"></data>
+        <data class="p-note" value="{{ .Site.Params.description }}"></data>
 
         <dl class="hc-container">
-            <data class="p-note" value="{{ .Site.Params }}"></data>
-
             <dt>Username</dt>
             <dd class="p-name p-nickname">nateify</dd>
             <dt>Pronunciation</dt>
