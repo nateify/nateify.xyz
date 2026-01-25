@@ -15,7 +15,7 @@
                     <div class="list-content">
                         <a class="u-url p-name" href="{{ .RelPermalink }}">{{ .Title }}</a>
                         <p class="p-summary">
-                            {{ .Plain | truncate 180 }}
+                            {{ .Plain | htmlUnescape | truncate 180 }}
                         </p>
                     </div>
                 </li>

@@ -112,6 +112,7 @@ title = "nateify's website"
         [markup.goldmark.renderer]
             unsafe = true
         [markup.goldmark.extensions]
+            typographer = false
             strikethrough = false
             [markup.goldmark.extensions.extras]
                 [markup.goldmark.extensions.extras.delete]
