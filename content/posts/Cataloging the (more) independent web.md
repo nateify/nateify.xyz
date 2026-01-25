@@ -1,7 +1,7 @@
 ---
 title: Cataloging the (more) independent web
 date: 2026-01-25T13:20:37-05:00
-draft: true
+draft: false
 description: ""
 categories: []
 tags: []
