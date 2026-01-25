@@ -4,7 +4,10 @@ date: 2026-01-25T13:20:37-05:00
 draft: false
 description: ""
 categories: []
-tags: []
+tags:
+  - indieweb
+  - smolweb
+  - fediverse
 uuid: 923d6e24-e97c-4164-bb8e-42eb916234cc
 lastmod:
 ---
